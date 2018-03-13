@@ -4,6 +4,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
+const Translate = require('@google-cloud/translate');
+
+const projectId = 'process.env.GCP_PJ_ID';
+const translate = new Translate({
+  projectId: projectId,
+});
+
+const target = 'en';
 
 googlehome.device('Google-Home', language);
 
@@ -19,13 +27,22 @@ app.listen(3000);
 console.log('Server is online.');
 
 app.post('/', function(req, res,next) {
-    // リクエストボディを出力
-    fs.writeFileSync('out.txt', req.body.name);
-    // パラメータ名、nameを出力
-    console.log(req.body.name);
-    // 発声
-    googlehome.notify(req.body.name, function(res) {
-        console.log(res);
-    });
+
+    const text = req.body.name;
+
+    translate
+        .translate(text, target)
+        .then(results => {
+            const translation = results[0];
+    
+            console.log(`Text: ${text}`);
+            console.log(`Translation: ${translation}`);
+            googlehome.notify(translation, function(translation) {
+                console.log(translation);
+            });
+        })
+        .catch(err => {
+          console.error('ERROR:', err);
+        });
     res.send('POST request to the homepage');
 })
