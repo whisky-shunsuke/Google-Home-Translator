@@ -2,18 +2,17 @@ var firebase = require("firebase");
 
 //firebase config
 var config = {
-  apiKey: "###################################",
-  authDomain: "####################################",
-  databaseURL: "########################################",
-  projectId: "#####################################",
-  storageBucket: "#################################",
-  messagingSenderId: "#############################3"
+  apiKey: "######",
+  authDomain: "######",
+  databaseURL: "######",
+  projectId: "######",
+  storageBucket: "######",
+  messagingSenderId: "######"
 };
 firebase.initializeApp(config);
 
 //jsonからvalueに一致する値取得
 const getJsonData = (value, json) => {
-console.log('100-------------------');
   for (var name in json)  if (value == name) return json[name]
   return json["default"]
 }
@@ -49,14 +48,10 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.listen(3000);
-console.log('Server is online.');
 
 db.ref(path).on("value", function(changedSnapshot) {
-console.log('200-------------------');
     const value = changedSnapshot.child(key).val();
 console.log(value);
-//    app.post('/', function(req, res,next) {
-console.log('300-------------------'); 
         const text = value;
     
         translate
@@ -73,7 +68,4 @@ console.log('300-------------------');
             .catch(err => {
               console.error('ERROR:', err);
             });
-//        res.send('POST request to the homepage');
-//    })
-
 });
